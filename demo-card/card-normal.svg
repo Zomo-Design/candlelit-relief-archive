@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="600" height="900" viewBox="0 0 600 900">
+  <defs>
+    <radialGradient id="dome" cx="42%" cy="35%" r="70%">
+      <stop offset="0" stop-color="#6f9fff"/>
+      <stop offset="0.55" stop-color="#8585ff"/>
+      <stop offset="1" stop-color="#a66fe8"/>
+    </radialGradient>
+  </defs>
+  <rect width="600" height="900" rx="42" fill="#8080ff"/>
+  <rect x="24" y="24" width="552" height="852" rx="31" fill="none" stroke="#6da1f6" stroke-width="11"/>
+  <rect x="42" y="42" width="516" height="816" rx="24" fill="none" stroke="#9a72ee" stroke-width="7"/>
+  <circle cx="300" cy="358" r="184" fill="#8080ff" stroke="url(#dome)" stroke-width="24"/>
+  <circle cx="300" cy="358" r="150" fill="#8080ff" stroke="#73a2f0" stroke-width="9"/>
+  <path d="M300 205 338 300 440 306 362 372 384 472 300 418 216 472 238 372 160 306 262 300Z" fill="#8080ff" stroke="#a66fe8" stroke-width="18" stroke-linejoin="round"/>
+  <circle cx="300" cy="350" r="62" fill="url(#dome)" stroke="#72a7f3" stroke-width="15"/>
+  <circle cx="300" cy="350" r="14" fill="#8080ff"/>
+  <path d="M86 142c62 2 98-30 116-76M514 142c-62 2-98-30-116-76M86 758c62-2 98 30 116 76M514 758c-62-2-98 30-116 76" fill="none" stroke="#6ca4ef" stroke-width="12" stroke-linecap="round"/>
+  <text x="300" y="650" text-anchor="middle" fill="#9a70ee" font-family="Georgia,serif" font-size="58" letter-spacing="8">OPEN</text>
+  <text x="300" y="718" text-anchor="middle" fill="#6aa5ef" font-family="Georgia,serif" font-size="43" letter-spacing="10">RELIEF</text>
+</svg>

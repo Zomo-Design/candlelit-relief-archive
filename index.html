@@ -1,0 +1,1097 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="referrer" content="no-referrer">
+<meta http-equiv="Permissions-Policy" content="camera=(), microphone=(), geolocation=()">
+<link rel="icon" href="data:,">
+<title>Relief Light Gallery</title>
+<style>
+  :root { color-scheme: dark; }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { height: 100%; }
+  body {
+    min-height: 100vh; min-height: 100dvh;
+    overflow: hidden;
+    background:
+      radial-gradient(circle at 50% 50%, rgba(126, 85, 30, 0.11), transparent 31%),
+      #020302;
+    font-family: "Didot", "Bodoni MT", "Times New Roman", serif;
+    color: #cfc6b8;
+    user-select: none; -webkit-user-select: none;
+  }
+  .caps { text-transform: uppercase; letter-spacing: 0.28em; font-size: 10px; color: #8f877a; }
+
+  /* ---------- 顶部 ---------- */
+  header {
+    position: fixed; inset: 0 0 auto 0; height: 92px; z-index: 31;
+    pointer-events: none;
+  }
+  header > * { pointer-events: auto; }
+  .carousel-brand {
+    position: absolute; top: clamp(16px, 2.2vh, 26px); left: clamp(12px, 1.2vw, 26px);
+    display: flex; align-items: center; gap: clamp(7px, 0.6vw, 11px);
+    width: clamp(144px, 10vw, 190px); pointer-events: none;
+  }
+  .carousel-brand__emblem {
+    display: block; flex: 0 0 auto; width: clamp(46px, 3.2vw, 64px); height: auto;
+  }
+  .carousel-brand__name {
+    display: flex; flex: 1 1 auto; flex-direction: column; align-items: center;
+    color: #fff; font: 400 clamp(10.5px, 0.78vw, 16px)/1.04 Arial, Helvetica, sans-serif;
+    letter-spacing: 0.025em; white-space: nowrap;
+  }
+  .carousel-editorial-labels {
+    position: fixed; top: clamp(46px, 5.1vh, 59px); left: 50%; z-index: 31;
+    display: flex; justify-content: space-between; width: clamp(620px, 47vw, 980px);
+    color: rgba(244, 239, 229, 0.64);
+    font: 400 clamp(11px, 0.72vw, 14px)/1 Arial, Helvetica, sans-serif;
+    letter-spacing: 0.1em; white-space: nowrap; pointer-events: none;
+    transform: translateX(-50%);
+  }
+  .about {
+    position: absolute; top: clamp(42px, 5.2vh, 60px); right: clamp(32px, 4vw, 76px);
+    display: flex; align-items: center; gap: clamp(18px, 1.6vw, 30px);
+    color: rgba(244, 239, 229, 0.7);
+    font: 400 clamp(13px, 0.95vw, 17px)/1 Arial, Helvetica, sans-serif;
+  }
+  .about-label { white-space: nowrap; }
+  .carousel-menu-icon { display: grid; gap: 5px; width: 27px; }
+  .carousel-menu-icon span { display: block; width: 100%; height: 1px; background: currentColor; }
+
+  /* 顶部中央：烛光 + 两侧小字 */
+  .candle-zone {
+    position: fixed; top: 0; left: 50%; transform: translateX(-50%);
+    width: 230px; height: 230px; z-index: 7; pointer-events: none;
+    display: flex; align-items: flex-start; justify-content: center;
+    isolation: isolate;
+  }
+  .candle-ambient {
+    position: absolute; inset: -18% -120% -40%; z-index: -1; display: block;
+    border-radius: 50%;
+    background: radial-gradient(
+      ellipse 48% 48% at 50% 42%,
+      rgba(184, 108, 27, 0.2),
+      rgba(127, 71, 18, 0.085) 42%,
+      rgba(96, 48, 12, 0.025) 72%,
+      transparent 96%
+    );
+    filter: blur(64px);
+    animation: candle-ambient-breathe 5.088s ease-in-out infinite;
+  }
+  /* 可选壁烛视频：screen 混合保留烛火和金属亮部，径向遮罩柔化视频边缘。 */
+  .candle-video {
+    position: relative; width: 100%; height: 100%; object-fit: contain; display: block;
+    mix-blend-mode: screen;
+    -webkit-mask-image: radial-gradient(
+      ellipse 70% 64% at 50% 43%, #000 52%, rgba(0,0,0,0.86) 68%, transparent 100%
+    );
+    mask-image: radial-gradient(
+      ellipse 70% 64% at 50% 43%, #000 52%, rgba(0,0,0,0.86) 68%, transparent 100%
+    );
+  }
+  .sconce { position: relative; margin-top: 26px; width: 60px; height: 150px; }
+  .plate { position: absolute; top: 26px; left: 50%; transform: translateX(-50%); width: 44px; height: 44px; border-radius: 50%;
+    background: radial-gradient(circle at 38% 32%, #8a6a34, #4a3417 68%, #2b1e0d);
+    box-shadow: 0 0 14px rgba(255,190,100,0.25), inset 0 0 6px rgba(0,0,0,0.6); }
+  .arm { position: absolute; top: 62px; left: 50%; transform: translateX(-50%); width: 8px; height: 26px;
+    background: linear-gradient(90deg, #2b1e0d, #7a5a2c 45%, #3a2a12); border-radius: 3px; }
+  .cup { position: absolute; top: 84px; left: 50%; transform: translateX(-50%); width: 22px; height: 12px;
+    background: linear-gradient(180deg, #8a6a34, #3a2a12); border-radius: 3px 3px 6px 6px; }
+  .candle { position: absolute; top: 44px; left: 50%; transform: translateX(-50%); width: 10px; height: 44px;
+    background: linear-gradient(90deg, #d8c49a, #f4e8cc 45%, #c9b586); border-radius: 3px; }
+  .flame {
+    position: absolute; top: 22px; left: 50%; width: 12px; height: 24px;
+    transform: translateX(-50%); transform-origin: 50% 100%;
+    background: radial-gradient(50% 62% at 50% 68%, #fff6d8 0%, #ffd06a 42%, #ff9a2e 68%, rgba(255,120,30,0) 100%);
+    border-radius: 50% 50% 46% 46% / 66% 66% 34% 34%;
+    filter: blur(0.4px);
+    animation: flick 2.6s ease-in-out infinite;
+  }
+  @keyframes flick {
+    0%,100% { transform: translateX(-50%) scale(1,1); opacity: 0.96; }
+    30% { transform: translateX(-51%) scale(0.94,1.06); opacity: 1; }
+    55% { transform: translateX(-49%) scale(1.05,0.95); opacity: 0.9; }
+    80% { transform: translateX(-50%) scale(0.97,1.03); opacity: 0.98; }
+  }
+
+  /* 暖金动态光粒 */
+  #particles {
+    position: fixed; top: 7%; left: 50%; z-index: 8;
+    width: min(68vw, 1080px); height: 62vh;
+    transform: translateX(-50%); pointer-events: none;
+  }
+  #particles span {
+    position: absolute; top: var(--particle-y); left: var(--particle-x);
+    width: var(--particle-size); height: var(--particle-size); border-radius: 50%;
+    background: #ffd98a;
+    box-shadow: 0 0 12px 3px rgba(244,186,82,0.52), 0 0 24px rgba(198,116,24,0.18);
+    animation: particle-drift var(--particle-duration) cubic-bezier(0.45,0.02,0.55,0.98)
+      var(--particle-delay) infinite alternate;
+  }
+  @keyframes candle-ambient-breathe {
+    0%, 100% { opacity: 0.72; transform: translate3d(-2px,1px,0) scale(0.98); }
+    50% { opacity: 0.9; transform: translate3d(2px,-1px,0) scale(1.02); }
+  }
+  @keyframes particle-drift {
+    from { opacity: 0.2; transform: translate3d(-7px,7px,0) scale(0.72); }
+    to { opacity: 0.92; transform: translate3d(12px,-14px,0) scale(1.25); }
+  }
+
+  /* ---------- 轮播 ---------- */
+  #stage {
+    position: fixed; inset: 0; z-index: 10;
+    display: flex; align-items: center; justify-content: center;
+    cursor: grab; touch-action: pan-y;
+  }
+  #stage.grabbing { cursor: grabbing; }
+  #lightbox.on { cursor: crosshair; }
+  #lightbox.on .lb-btn { cursor: pointer; }
+  #strip { position: absolute; inset: 0; transform-style: preserve-3d; pointer-events: none; }
+  .gcard {
+    position: absolute; left: 0; top: 0;
+    appearance: none; border: 0; padding: 0; background: transparent; color: inherit; font: inherit;
+    transform-style: preserve-3d;
+    transition: filter 180ms ease;
+    will-change: transform, filter;
+    pointer-events: auto;
+  }
+  .gcard:focus-visible { outline: 1px solid rgba(255, 222, 158, 0.9); outline-offset: 8px; }
+  .gcard img { display: block; width: 100%; height: 100%; object-fit: contain; pointer-events: none; }
+
+  /* ---------- 底部标题 ---------- */
+  footer {
+    position: fixed; inset: auto 0 0 0; z-index: 20; pointer-events: none;
+    display: flex; flex-direction: column; align-items: center; gap: 6px;
+    padding-bottom: max(26px, env(safe-area-inset-bottom));
+  }
+  #cardTitle { text-align: center; transition: opacity 0.26s ease; min-height: 40px; }
+  #cardTitle .t { font-size: 15px; letter-spacing: 0.34em; color: #e4dcc9; text-transform: uppercase; }
+  #cardTitle .m { margin-top: 5px; font-size: 9px; letter-spacing: 0.3em; color: #7d7668; text-transform: uppercase; }
+  #exTitle {
+    font-family: "Snell Roundhand", "Apple Chancery", "Segoe Script", "Brush Script MT", cursive;
+    font-weight: 400; font-size: clamp(40px, 7.2vw, 96px); line-height: 1.1;
+    color: #efe8d8; text-shadow: 0 0 26px rgba(255,190,110,0.16);
+    white-space: nowrap;
+  }
+  #hint { margin-top: 2px; font-size: 8px; letter-spacing: 0.34em; color: #615b4f; text-transform: uppercase; }
+
+  /* ---------- 灯箱 ---------- */
+  #lightbox { position: fixed; inset: 0; z-index: 40; display: none; }
+  #lightbox.on { display: block; }
+  #lbBackdrop {
+    position: absolute; inset: 0; opacity: 0;
+    background:
+      radial-gradient(circle at 50% 42%, rgba(34,40,57,0.3), transparent 39%),
+      rgba(4,5,10,0.9);
+    -webkit-backdrop-filter: blur(13px);
+    backdrop-filter: blur(13px);
+  }
+  #lbCard { position: fixed; z-index: 41; will-change: transform, width, height; }
+  #lbCard img, #lbCard canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+  #lbCard img { object-fit: contain; }
+  #lbShadow { position: fixed; z-index: 40; border-radius: 30px;
+    background: radial-gradient(60% 60% at 50% 50%, rgba(0,0,0,0.8), rgba(0,0,0,0) 75%);
+    filter: blur(50px); opacity: 0.45; pointer-events: none; }
+  .lb-btn {
+    position: fixed; z-index: 45; width: 52px; height: 52px; border-radius: 50%;
+    border: 1px solid rgba(216,207,191,0.28); background: rgba(16,17,22,0.55);
+    color: #d8cfbf; font-size: 22px; font-family: inherit; cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    backdrop-filter: blur(6px); transition: background 0.2s, border-color 0.2s;
+  }
+  .lb-btn:hover { background: rgba(40,38,32,0.75); border-color: rgba(216,207,191,0.55); }
+  #lbPrev { left: 4vw; top: 50%; transform: translateY(-50%); }
+  #lbNext { right: 4vw; top: 50%; transform: translateY(-50%); }
+  #lbClose { right: 26px; top: 24px; font-size: 18px; }
+  #lbTitle { position: fixed; z-index: 45; left: 50%; transform: translateX(-50%);
+    bottom: max(20px, env(safe-area-inset-bottom)); text-align: center; pointer-events: none; }
+  #lbTitle .t { font-size: 13px; letter-spacing: 0.32em; color: #d8cfbf; text-transform: uppercase; }
+  #lbTitle .m { margin-top: 4px; font-size: 8px; letter-spacing: 0.3em; color: #7d7668; text-transform: uppercase; }
+  #lbNotice { position: fixed; z-index: 46; left: 50%; transform: translateX(-50%);
+    bottom: 84px; max-width: 86vw; padding: 8px 14px; border-radius: 8px;
+    background: rgba(28,30,38,0.85); border: 1px solid rgba(255,255,255,0.08);
+    color: #b8bcc8; font-size: 12px; font-family: -apple-system, "PingFang SC", sans-serif; }
+  #lbNotice[hidden] { display: none; }
+
+  @media (max-width: 1050px) {
+    .carousel-editorial-labels { display: none; }
+  }
+  @media (max-width: 640px) {
+    .candle-zone { transform: translateX(-50%) scale(0.72); transform-origin: top center; }
+    .carousel-brand { top: max(18px, env(safe-area-inset-top)); left: 16px; width: 136px; }
+    .carousel-brand__emblem { width: 44px; }
+    .about { top: max(24px, env(safe-area-inset-top)); right: 16px; gap: 12px; font-size: 11px; }
+    .carousel-menu-icon { gap: 4px; width: 22px; }
+    #particles { top: 9%; width: 92vw; height: 58dvh; }
+    #lbPrev, #lbNext { top: auto; bottom: max(76px, calc(env(safe-area-inset-bottom) + 64px)); transform: none; }
+    #lbPrev { left: calc(50% - 68px); } #lbNext { right: calc(50% - 68px); }
+    #lbClose { top: 14px; right: 14px; }
+    #lbTitle { bottom: max(18px, env(safe-area-inset-bottom)); }
+    .lb-btn { width: 46px; height: 46px; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .flame { animation: none; }
+    #particles span, .candle-ambient { animation: none; }
+    .candle-ambient { opacity: 0.8; }
+    #cardTitle { transition: none; }
+  }
+</style>
+</head>
+<body>
+
+<div id="particles"></div>
+
+<header>
+  <div class="carousel-brand" role="img" aria-label="RELIEF LIGHT LAB">
+    <img class="carousel-brand__emblem" src="relief-mark.svg" alt="" aria-hidden="true">
+    <span class="carousel-brand__name" aria-hidden="true">
+      <span id="logoL1"></span><span id="logoL2"></span>
+    </span>
+  </div>
+  <div class="about">
+    <span class="about-label" id="aboutText"></span>
+    <span class="carousel-menu-icon" aria-hidden="true"><span></span><span></span><span></span></span>
+  </div>
+</header>
+
+<div class="carousel-editorial-labels" aria-hidden="true">
+  <span id="tcLeft"></span><span id="tcRight"></span>
+</div>
+
+<div class="candle-zone">
+  <span class="candle-ambient"></span>
+  <video class="candle-video" id="candleVideo" autoplay muted loop playsinline
+         preload="metadata" disablepictureinpicture></video>
+  <div class="sconce" id="cssCandle" style="display:none">
+    <div class="plate"></div><div class="arm"></div><div class="cup"></div>
+    <div class="candle"></div><div class="flame"></div>
+  </div>
+</div>
+
+<div id="stage"><div id="strip"></div></div>
+
+<footer>
+  <div id="cardTitle"><div class="t"></div><div class="m"></div></div>
+  <h1 id="exTitle"></h1>
+  <div id="hint"></div>
+</footer>
+
+<div id="lightbox" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="lbTitleText" tabindex="-1">
+  <div id="lbBackdrop"></div>
+  <div id="lbShadow"></div>
+  <div id="lbCard"><img alt=""><canvas></canvas></div>
+  <button class="lb-btn" id="lbPrev" aria-label="Previous card">‹</button>
+  <button class="lb-btn" id="lbNext" aria-label="Next card">›</button>
+  <button class="lb-btn" id="lbClose" aria-label="Close card">✕</button>
+  <div id="lbTitle"><div class="t" id="lbTitleText"></div><div class="m"></div></div>
+  <div id="lbNotice" hidden></div>
+</div>
+
+<script>
+"use strict";
+/* ============================================================================
+ * Relief Light Gallery —— WebGL2 浮雕收藏卡开源示例
+ * 单文件，无外部依赖。轮播=纯 DOM；仅打开的单卡启动 WebGL2 追光。
+ * 文本与参数来自 gallery-config.json；每卡渲染参数来自各自 card-config.json。
+ * ========================================================================== */
+
+const EMBED_DEFAULTS = {
+  exhibition: { title: "Relief Light Gallery", logoLine1: "RELIEF LIGHT", logoLine2: "LAB",
+    topCenterLeft: "OBJECTS IN LIGHT", topCenterRight: "MEMORIES IN RELIEF", aboutText: "About",
+    hintDesktop: "DRAG · SCROLL · ← → TO EXPLORE — CLICK A CARD TO INSPECT",
+    hintMobile: "SWIPE TO EXPLORE — TAP A CARD TO INSPECT" },
+  order: [],
+  carousel: { cardHeightVH: 0.44, cardHeightMin: 220, cardHeightMax: 520, cardHeightMobileVH: 0.34,
+    gapRatio: 0.3, perspective: 1600, depth: 230, dimStrength: 0.62,
+    dragThreshold: 8, wheelSpeed: 1.0 },
+  lightbox: { maxHeightVH: 0.78, maxWidthVW: 0.88, openDuration: 420, switchDuration: 220,
+    swipeThreshold: 46, swipeDominance: 1.4 },
+  fx: { particleCount: 30, titleFadeMs: 260, candleVideo: "" }
+};
+
+/* 与单卡验收页一致的渲染默认值（卡片自身 config 覆盖对应字段） */
+const CARD_RENDER_DEFAULTS = {
+  lighting: { lightColor: [1,0.92,0.78], ambientColor: [0.82,0.83,0.88], ambientStrength: 0.56,
+    lightZ: 0.5, normalStrength: 1.45, normalZFloor: 0.08, wrapScale: 0.8, wrapBias: 0.2,
+    diffuseStrength: 0.62, shininessHigh: 52, shininessLow: 6, specRoughAtten: 0.85,
+    specStrength: 0.46, specWrapGate: true, rimStrength: 0.12, rimPower: 2, candleFlicker: 0.04 },
+  parallax: { amplitude: 0.0034 },
+  mouse: { uvMin: -0.4, uvMax: 1.4 },
+  tilt: { perspective: 1400, maxDeg: 4.2, swayDeg: 1.3, swaySpeed: 0.5, ease: 0.055 },
+  render: { maxDPR: 1.5 }
+};
+
+const REDUCED = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+const IS_COARSE = window.matchMedia("(pointer: coarse)").matches;
+const clamp = (v, lo, hi) => Math.min(hi, Math.max(lo, v));
+const $ = id => document.getElementById(id);
+
+/* ---------------- 配置与素材载入 ---------------- */
+async function fetchJSON(url) {
+  const r = await fetch(url, { cache: "no-store" });
+  if (!r.ok) throw new Error(url + " → HTTP " + r.status);
+  return r.json();
+}
+async function assetExists(url) {
+  try {
+    const head = await fetch(url, { method: "HEAD", cache: "no-store" });
+    if (head.ok) return true;
+    if (head.status !== 405 && head.status !== 501) return false;
+    const get = await fetch(url, { method: "GET", cache: "no-store" });
+    return get.ok;
+  }
+  catch (_) { return false; }
+}
+function loadImage(src) {
+  return new Promise((res, rej) => {
+    const im = new Image();
+    im.onload = () => res(im);
+    im.onerror = () => rej(new Error(src));
+    im.src = src;
+  });
+}
+
+/* ---------------- WebGL 着色器（与验收版完全一致） ---------------- */
+const VERT_SRC = `#version 300 es
+layout(location=0) in vec2 aPos;
+out vec2 vUv;
+void main(){ vUv = aPos*0.5+0.5; gl_Position = vec4(aPos,0.,1.); }`;
+
+const FRAG_SRC = `#version 300 es
+precision highp float;
+in vec2 vUv; out vec4 outColor;
+uniform sampler2D uAlbedo, uNormal, uRough, uHeight;
+uniform vec2 uMouse; uniform float uAspect, uParallax, uTime;
+uniform vec3 uLightColor, uAmbientColor;
+uniform float uAmbientStrength, uLightZ, uNormalStrength, uNormalZFloor,
+  uWrapScale, uWrapBias, uDiffuseStrength, uShinHigh, uShinLow,
+  uSpecRoughAtten, uSpecStrength, uSpecWrapGate, uRimStrength, uRimPower, uFlicker;
+void main(){
+  float h0 = texture(uHeight, vUv).r;
+  vec2 mOff = uMouse - vec2(0.5);
+  vec2 uv = vUv - mOff * h0 * uParallax;
+  vec4 albedo = texture(uAlbedo, uv);
+  float a = albedo.a;
+  vec3 n = texture(uNormal, uv).xyz * 2.0 - 1.0;
+  n.xy *= uNormalStrength; n.z = max(n.z, uNormalZFloor);
+  vec3 N = normalize(n);
+  vec2 d = (uMouse - uv) * vec2(uAspect, 1.0);
+  vec3 L = normalize(vec3(d, uLightZ));
+  float ndl = dot(N, L);
+  float wrap = clamp(ndl * uWrapScale + uWrapBias, 0.0, 1.0);
+  float flick = 1.0 + uFlicker * (sin(uTime*11.3)*0.55 + sin(uTime*5.7+1.3)*0.45);
+  vec3 lightCol = uLightColor * flick;
+  float rough = texture(uRough, uv).r;
+  float shininess = mix(uShinHigh, uShinLow, rough);
+  vec3 V = vec3(0.0,0.0,1.0);
+  vec3 H = normalize(L + V);
+  float spec = pow(max(dot(N,H),0.0), shininess);
+  spec *= (1.0 - rough * uSpecRoughAtten) * uSpecStrength;
+  spec *= mix(1.0, wrap, uSpecWrapGate);
+  float rim = pow(1.0 - max(dot(N,V),0.0), uRimPower);
+  float side = clamp(length(mOff)*1.4, 0.0, 1.0);
+  vec3 rimC = lightCol * rim * side * uRimStrength;
+  vec3 col = albedo.rgb * (uAmbientColor*uAmbientStrength + lightCol*wrap*uDiffuseStrength)
+           + lightCol*spec + rimC;
+  outColor = vec4(col*a, a);
+}`;
+
+function compileShader(gl, type, src) {
+  const s = gl.createShader(type);
+  gl.shaderSource(s, src); gl.compileShader(s);
+  if (!gl.getShaderParameter(s, gl.COMPILE_STATUS)) throw new Error(gl.getShaderInfoLog(s));
+  return s;
+}
+
+/* 单卡渲染器：完全复用验收版算法，参数来自该卡 card-config.json。
+   同一个 canvas 上下文会被反复复用（切换/关闭时只删资源不丢上下文），
+   因此把所有 GL 资源记录在 state.res 里供确定性销毁。 */
+function createCardRenderer(canvas, cfg, images) {
+  const gl = canvas.getContext("webgl2", { alpha: true, premultipliedAlpha: true,
+    antialias: true, powerPreference: "high-performance" });
+  if (!gl) return null;
+  const res = { textures: [], buffer: null, program: null, shaders: [] };
+  const prog = gl.createProgram();
+  res.program = prog;
+  const vs = compileShader(gl, gl.VERTEX_SHADER, VERT_SRC);
+  const fs = compileShader(gl, gl.FRAGMENT_SHADER, FRAG_SRC);
+  res.shaders.push(vs, fs);
+  gl.attachShader(prog, vs);
+  gl.attachShader(prog, fs);
+  gl.linkProgram(prog);
+  if (!gl.getProgramParameter(prog, gl.LINK_STATUS)) throw new Error(gl.getProgramInfoLog(prog));
+  gl.useProgram(prog);
+  const buf = gl.createBuffer();
+  res.buffer = buf;
+  gl.bindBuffer(gl.ARRAY_BUFFER, buf);
+  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1,-1, 1,-1, -1,1, 1,1]), gl.STATIC_DRAW);
+  gl.enableVertexAttribArray(0);
+  gl.vertexAttribPointer(0, 2, gl.FLOAT, false, 0, 0);
+  gl.enable(gl.BLEND); gl.blendFunc(gl.ONE, gl.ONE_MINUS_SRC_ALPHA);
+  gl.clearColor(0,0,0,0);
+  ["albedo","normal","roughness","height"].forEach((k, i) => {
+    const tex = gl.createTexture();
+    res.textures.push(tex);
+    gl.activeTexture(gl.TEXTURE0 + i);
+    gl.bindTexture(gl.TEXTURE_2D, tex);
+    gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, 1);
+    gl.pixelStorei(gl.UNPACK_COLORSPACE_CONVERSION_WEBGL, gl.NONE);
+    gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, images[k]);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+    gl.uniform1i(gl.getUniformLocation(prog, ["uAlbedo","uNormal","uRough","uHeight"][i]), i);
+  });
+  const U = {};
+  ["uMouse","uAspect","uParallax","uTime","uLightColor","uAmbientColor","uAmbientStrength",
+   "uLightZ","uNormalStrength","uNormalZFloor","uWrapScale","uWrapBias","uDiffuseStrength",
+   "uShinHigh","uShinLow","uSpecRoughAtten","uSpecStrength","uSpecWrapGate","uRimStrength",
+   "uRimPower","uFlicker"].forEach(n => U[n] = gl.getUniformLocation(prog, n));
+  const L = cfg.lighting;
+  gl.uniform3fv(U.uLightColor, L.lightColor);
+  gl.uniform3fv(U.uAmbientColor, L.ambientColor);
+  gl.uniform1f(U.uAmbientStrength, L.ambientStrength);
+  gl.uniform1f(U.uLightZ, L.lightZ);
+  gl.uniform1f(U.uNormalStrength, L.normalStrength);
+  gl.uniform1f(U.uNormalZFloor, L.normalZFloor);
+  gl.uniform1f(U.uWrapScale, L.wrapScale);
+  gl.uniform1f(U.uWrapBias, L.wrapBias);
+  gl.uniform1f(U.uDiffuseStrength, L.diffuseStrength);
+  gl.uniform1f(U.uShinHigh, L.shininessHigh);
+  gl.uniform1f(U.uShinLow, L.shininessLow);
+  gl.uniform1f(U.uSpecRoughAtten, L.specRoughAtten);
+  gl.uniform1f(U.uSpecStrength, L.specStrength);
+  gl.uniform1f(U.uSpecWrapGate, L.specWrapGate ? 1 : 0);
+  gl.uniform1f(U.uRimStrength, L.rimStrength);
+  gl.uniform1f(U.uRimPower, L.rimPower);
+  gl.uniform1f(U.uFlicker, REDUCED ? 0 : (L.candleFlicker || 0));
+  gl.uniform1f(U.uParallax, REDUCED ? 0 : cfg.parallax.amplitude);
+
+  const state = { gl, U, cfg, res, dead: false,
+    aspect: images.albedo.naturalWidth / images.albedo.naturalHeight,
+    mouse: { u: 0.5, v: 0.35 }, lastPointerT: -1e9, rx: 0, ry: 0 };
+  gl.uniform1f(U.uAspect, state.aspect);
+  return state;
+}
+
+/* ============================================================================
+ * 主程序
+ * ========================================================================== */
+(async function main() {
+  /* ---- 1. 展览配置 ---- */
+  let G = EMBED_DEFAULTS;
+  try {
+    const u = await fetchJSON("gallery-config.json");
+    G = { ...EMBED_DEFAULTS, ...u,
+      exhibition: { ...EMBED_DEFAULTS.exhibition, ...(u.exhibition || {}) },
+      carousel:   { ...EMBED_DEFAULTS.carousel,   ...(u.carousel   || {}) },
+      lightbox:   { ...EMBED_DEFAULTS.lightbox,   ...(u.lightbox   || {}) },
+      fx:         { ...EMBED_DEFAULTS.fx,         ...(u.fx         || {}) } };
+  } catch (_) {}
+
+  /* 顶部与底部文案 */
+  $("logoL1").textContent = G.exhibition.logoLine1;
+  $("logoL2").textContent = G.exhibition.logoLine2;
+  document.querySelector(".carousel-brand").setAttribute("aria-label",
+    [G.exhibition.logoLine1, G.exhibition.logoLine2].filter(Boolean).join(" "));
+  $("tcLeft").textContent = G.exhibition.topCenterLeft;
+  $("tcRight").textContent = G.exhibition.topCenterRight;
+  $("aboutText").textContent = G.exhibition.aboutText;
+  $("exTitle").textContent = G.exhibition.title;
+  $("hint").textContent = IS_COARSE ? G.exhibition.hintMobile : G.exhibition.hintDesktop;
+  document.title = G.exhibition.title;
+
+  /* 壁烛视频：加载/播放失败时回退为 CSS 蜡烛；reduced-motion 时停在首帧 */
+  (function initCandle() {
+    const cv = $("candleVideo"), css = $("cssCandle");
+    const useCss = () => { cv.style.display = "none"; css.style.display = "block"; };
+    const src = (G.fx && G.fx.candleVideo) || "";
+    if (!src) { useCss(); return; }
+    cv.addEventListener("error", useCss);
+    cv.src = src;
+    const p = cv.play();
+    if (p && p.catch) p.catch(() => {});
+    if (REDUCED) cv.addEventListener("loadeddata", () => { cv.pause(); cv.currentTime = 0; });
+  })();
+
+  /* 暖金动态光粒：使用确定性位置，避免刷新后随机改变构图。 */
+  {
+    const particles = $("particles");
+    const particleCount = clamp(Math.trunc(G.fx.particleCount ?? 30), 0, 200);
+    for (let i = 0; i < particleCount; i++) {
+      const s = document.createElement("span");
+      const x = 18 + ((i * 37) % 65);
+      const y = i < 10 ? 4 + ((i * 17) % 24) : 30 + (((i - 10) * 23) % 51);
+      const size = 1.4 + (i % 4) * 0.62;
+      const delay = -((i * 0.31) % 3.8);
+      const duration = 3 + (i % 5) * 0.45;
+      s.style.cssText = `--particle-x:${x}%;--particle-y:${y}%;--particle-size:${size}px;` +
+        `--particle-delay:${delay}s;--particle-duration:${duration}s;`;
+      particles.appendChild(s);
+    }
+  }
+
+  /* ---- 2. 卡片清单：校验素材完整性，缺文件则列出并跳过 ---- */
+  const skipped = [];
+  const cards = [];
+  for (const id of G.order) {
+    let cfg = null;
+    try { cfg = await fetchJSON(id + "/card-config.json"); }
+    catch (_) { skipped.push(id + " (missing card-config.json)"); continue; }
+    const merged = { ...cfg,
+      lighting: { ...CARD_RENDER_DEFAULTS.lighting, ...(cfg.lighting || {}) },
+      parallax: { ...CARD_RENDER_DEFAULTS.parallax, ...(cfg.parallax || {}) },
+      mouse:    { ...CARD_RENDER_DEFAULTS.mouse,    ...(cfg.mouse    || {}) },
+      tilt:     { ...CARD_RENDER_DEFAULTS.tilt,     ...(cfg.tilt     || {}) },
+      render:   { ...CARD_RENDER_DEFAULTS.render,   ...(cfg.render   || {}) } };
+    const need = ["albedo","normal","roughness","height"].map(k => [k, cfg.assets && cfg.assets[k]]);
+    const missing = [];
+    for (const [k, f] of need) {
+      if (!f) { missing.push(k + " not configured"); continue; }
+      if (!(await assetExists(id + "/" + f))) missing.push(f);
+    }
+    if (missing.length) { skipped.push(id + " (missing " + missing.join(", ") + ")"); continue; }
+    cards.push({ id, cfg: merged, aspect: 2/3, el: null, img: null, w: 0, x: 0 });
+  }
+  if (skipped.length) console.warn("[Gallery] Skipped incomplete cards:\n - " + skipped.join("\n - "));
+  if (!cards.length) { $("hint").textContent = "No displayable cards"; return; }
+
+  /* ---- 3. 轮播 DOM（打开单卡不走原生 click，统一由 pointerup 轻点判定，见下） ---- */
+  const stage = $("stage"), strip = $("strip");
+  cards.forEach((c, i) => {
+    const el = document.createElement("button");
+    el.type = "button";
+    el.className = "gcard";
+    el.setAttribute("aria-label", "Inspect " + (c.cfg.title || c.id));
+    const im = document.createElement("img");
+    im.src = c.id + "/" + c.cfg.assets.albedo;
+    im.alt = c.cfg.title || c.id;
+    im.onload = () => { c.aspect = im.naturalWidth / im.naturalHeight; layout(); };
+    el.appendChild(im);
+    strip.appendChild(el);
+    c.el = el; c.img = im;
+    el.addEventListener("click", e => {
+      if (e.detail === 0 && !lbOpen) openLightbox(i);
+    });
+  });
+
+  /* ---- 4. 页面状态（必须先于首次 layout() 与事件绑定完成初始化，避免 TDZ） ---- */
+  const C = G.carousel;
+  let cardH = 300, gap = 90, L = 1, positions = [];
+  let cam = 0, vel = 0, dragging = false, moved = 0, lastX = 0, lastMoveT = 0;
+  let pressCard = null, currentIdx = -1, snapTarget = null, motionPhase = "idle";
+  let lbOpen = false, lbIdx = -1, anim = null, renderer = null, switching = false;
+  let lastFocusedElement = null;
+  let lbPointer = { down: false, x0: 0, y0: 0 };
+
+  function layout() {
+    const vh = window.innerHeight;
+    const base = (window.innerWidth <= 640 ? C.cardHeightMobileVH : C.cardHeightVH) * vh;
+    cardH = clamp(base, C.cardHeightMin, C.cardHeightMax);
+    gap = cardH * C.gapRatio;
+    let acc = 0; positions = [];
+    cards.forEach(c => {
+      c.w = cardH * c.aspect;
+      positions.push(acc + c.w / 2);
+      acc += c.w + gap;
+    });
+    L = acc;
+    strip.style.perspective = C.perspective + "px";
+    if (!lbOpen && !dragging) { cam = positions[currentIdx > 0 ? currentIdx : 0] || 0; }
+  }
+
+  function wrapDelta(d) { return ((d % L) + L * 1.5) % L - L / 2; }
+  function nearestIdx() {
+    let best = 0, bd = Infinity;
+    positions.forEach((p, i) => { const d = Math.abs(wrapDelta(p - cam)); if (d < bd) { bd = d; best = i; } });
+    return best;
+  }
+
+  /* 连续运动模型：以像素为内部单位，保留不等宽卡片的
+     尺寸与真实间距；输入、惯性和磁吸只负责改变相机位置。 */
+  function motionStep() {
+    const vw = window.innerWidth;
+    if (vw <= 560) return vw * 0.72;
+    if (vw <= 900) return clamp(vw * 0.44, 190, 350);
+    return clamp(vw * 0.28, 250, 470);
+  }
+  function sampleMotionVelocity(previous, deltaPosition, deltaSeconds) {
+    const limit = motionStep() * 14;
+    const instant = deltaPosition / Math.max(1 / 240, deltaSeconds);
+    return clamp(previous * 0.65 + instant * 0.35, -limit, limit);
+  }
+  function nearestTrackPosition(value) {
+    let best = value, bd = Infinity;
+    positions.forEach(p => {
+      const delta = wrapDelta(p - value);
+      if (Math.abs(delta) < bd) { bd = Math.abs(delta); best = value + delta; }
+    });
+    return best;
+  }
+  function projectedSnapTarget() {
+    const travelSteps = clamp((vel / motionStep()) * 0.14, -2, 2);
+    return nearestTrackPosition(cam + travelSteps * motionStep());
+  }
+  function interpolateAnchors(distance, anchors) {
+    const amount = Math.min(Math.abs(distance), anchors.length - 1);
+    const lower = Math.floor(amount), upper = Math.min(lower + 1, anchors.length - 1);
+    const progress = amount - lower;
+    const eased = progress * progress * (3 - 2 * progress);
+    return anchors[lower] + (anchors[upper] - anchors[lower]) * eased;
+  }
+
+  const titleBox = $("cardTitle");
+  let titleTimer = 0;
+  function setTitle(i, instant) {
+    window.clearTimeout(titleTimer);
+    const c = cards[i];
+    const apply = () => {
+      titleBox.querySelector(".t").textContent = c.cfg.title || c.id.toUpperCase();
+      const meta = [c.cfg.year, c.cfg.material].filter(Boolean).join("  ·  ");
+      titleBox.querySelector(".m").textContent = meta;
+      titleBox.style.opacity = 1;
+    };
+    if (instant || REDUCED) { apply(); return; }
+    titleBox.style.opacity = 0;
+    titleTimer = window.setTimeout(apply, G.fx.titleFadeMs);
+  }
+
+  function renderCarousel() {
+    const stageW = window.innerWidth;
+    const step = motionStep();
+    const momentumLean = REDUCED ? 0 : clamp((vel / step) * 0.16, -1.4, 1.4);
+    cards.forEach((c, i) => {
+      const dx = wrapDelta(positions[i] - cam);
+      const w = c.w || cardH * c.aspect;
+      if (Math.abs(dx) > stageW / 2 + w) { c.el.style.display = "none"; return; }
+      c.el.style.display = "block";
+      const norm = dx / (stageW * 0.5);
+      const an = Math.abs(norm);
+      const distance = dx / step;
+      const isLeft = distance < 0;
+      const z = -Math.min(an, 1.6) * C.depth;
+      const rx = interpolateAnchors(distance, [-3, -5, -4, -4, -4]);
+      const ry = interpolateAnchors(distance,
+        isLeft ? [2, 9, 11, 12, 12] : [2, -9, -11, -12, -12]);
+      const rz = interpolateAnchors(distance,
+        isLeft ? [0.7, -1.8, -2.1, -2.3, -2.3] : [0.7, 1.8, 2.1, 2.3, 2.3]) + momentumLean;
+      const s = clamp(1.06 - an * 0.17, 0.55, 1.06);
+      const bright = 1 - Math.min(an * C.dimStrength, 0.78);
+      const x = stageW / 2 + dx;
+      const h = cardH;
+      c.el.style.width = w + "px"; c.el.style.height = h + "px";
+      c.el.style.transform =
+        `translate3d(${(x - w/2).toFixed(1)}px, ${(window.innerHeight/2 - h/2).toFixed(1)}px, ${z.toFixed(1)}px)` +
+        ` rotateX(${rx.toFixed(2)}deg) rotateY(${ry.toFixed(2)}deg)` +
+        ` rotateZ(${rz.toFixed(2)}deg) scale(${s.toFixed(3)})`;
+      c.el.style.filter = `brightness(${bright.toFixed(3)}) drop-shadow(0 22px 34px rgba(0,0,0,${(0.5*bright+0.12).toFixed(2)}))`;
+      c.el.style.zIndex = String(1000 - Math.round(Math.abs(dx)));
+    });
+    stage.dataset.position = (cam / step).toFixed(3);
+    stage.dataset.velocity = (vel / step).toFixed(3);
+    stage.dataset.motionPhase = dragging ? "drag" : motionPhase;
+    const ni = nearestIdx();
+    if (ni !== currentIdx) { const first = currentIdx === -1; currentIdx = ni; setTitle(ni, first); }
+  }
+
+  /* 几何命中：preserve-3d 里负 translateZ 的卡会被 strip 平面挡住原生命中，
+     所以按下时改用投影矩形包含判定，重叠时取 zIndex 最高（最前）的卡 */
+  function cardAt(x, y) {
+    let best = null, bz = -Infinity;
+    cards.forEach(c => {
+      if (!c.el || c.el.style.display === "none") return;
+      const r = c.el.getBoundingClientRect();
+      if (x >= r.left && x <= r.right && y >= r.top && y <= r.bottom) {
+        const z = parseInt(c.el.style.zIndex || "0", 10);
+        if (z > bz) { bz = z; best = c; }
+      }
+    });
+    return best;
+  }
+
+  /* 拖动 / 滚轮 / 键盘（注意：不做 setPointerCapture，否则 click 无法落到卡片上） */
+  stage.addEventListener("pointerdown", e => {
+    if (lbOpen || e.button !== 0) return;
+    dragging = true; moved = 0; lastX = e.clientX; lastMoveT = performance.now();
+    snapTarget = null; motionPhase = "idle";
+    stage.classList.add("grabbing");
+    pressCard = cardAt(e.clientX, e.clientY);
+  });
+  window.addEventListener("pointermove", e => {
+    if (!dragging || lbOpen) return;
+    const now = performance.now();
+    const dx = e.clientX - lastX;
+    const elapsedSeconds = Math.max(8, now - lastMoveT) / 1000;
+    lastX = e.clientX; lastMoveT = now;
+    const deltaCam = -dx;
+    cam += deltaCam; moved += Math.abs(dx);
+    vel = REDUCED ? 0 : sampleMotionVelocity(vel, deltaCam, elapsedSeconds);
+  });
+  /* 轻点判定：按下时已用几何命中记住目标卡，松开位移 ≤ 阈值即打开。
+     不依赖原生 click —— 3D 场景中 click 会因 hit-testing 与卡片滑动而落空。 */
+  function endDrag(e) {
+    if (!dragging) return;
+    dragging = false;
+    stage.classList.remove("grabbing");
+    if (e.type === "pointerup" && moved <= C.dragThreshold && pressCard) {
+      const idx = cards.indexOf(pressCard);
+      pressCard = null; vel = 0; snapTarget = null; motionPhase = "idle";
+      if (idx >= 0) openLightbox(idx);
+      return;
+    }
+    pressCard = null;
+    snapTarget = projectedSnapTarget();
+    motionPhase = REDUCED ? "snap" : "coast";
+  }
+  window.addEventListener("pointerup", endDrag);
+  window.addEventListener("pointercancel", endDrag);
+  let lastWheelT = -1e9;
+  stage.addEventListener("wheel", e => {
+    if (lbOpen) return;
+    e.preventDefault();
+    const now = performance.now();
+    let pixels = Math.abs(e.deltaX) > Math.abs(e.deltaY) ? e.deltaX : e.deltaY;
+    if (Math.abs(pixels) < 4) return;
+    if (e.deltaMode === 1) pixels *= 16;
+    else if (e.deltaMode === 2) pixels *= window.innerHeight;
+    if (REDUCED) {
+      const idx = (nearestIdx() + Math.sign(pixels) + cards.length) % cards.length;
+      cam += wrapDelta(positions[idx] - cam);
+      vel = 0; snapTarget = null; motionPhase = "idle";
+      return;
+    }
+    const deltaCam = clamp(pixels * 1.2 * C.wheelSpeed, -motionStep() * 0.32, motionStep() * 0.32);
+    const elapsedSeconds = Math.min(0.05, Math.max(8, now - lastWheelT) / 1000);
+    cam += deltaCam;
+    vel = sampleMotionVelocity(vel, deltaCam, elapsedSeconds);
+    snapTarget = projectedSnapTarget(); motionPhase = "idle";
+    lastWheelT = now;
+  }, { passive: false });
+
+  function stepCard(dir) {
+    if (lbOpen) { switchCard(dir); return; }
+    const idx = (nearestIdx() + dir + cards.length) % cards.length;
+    snapTarget = cam + wrapDelta(positions[idx] - cam);
+    vel = 0; motionPhase = REDUCED ? "idle" : "snap";
+    if (REDUCED) { cam = snapTarget; snapTarget = null; }
+  }
+  window.addEventListener("keydown", e => {
+    if (e.key === "ArrowLeft") stepCard(-1);
+    else if (e.key === "ArrowRight") stepCard(1);
+    else if (e.key === "Escape" && lbOpen) closeLightbox();
+  });
+
+  /* ---- 5. 灯箱（单卡打开）。状态变量已在上方统一起始化，此处只做 DOM 引用 ---- */
+  const lb = $("lightbox"), lbCard = $("lbCard"), lbBackdrop = $("lbBackdrop"),
+        lbShadow = $("lbShadow"), lbImg = lbCard.querySelector("img"),
+        lbCanvas = lbCard.querySelector("canvas"), lbNotice = $("lbNotice");
+  if (cards.length < 2) {
+    $("lbPrev").hidden = true;
+    $("lbNext").hidden = true;
+  }
+  lb.addEventListener("keydown", e => {
+    if (e.key !== "Tab" || !lbOpen) return;
+    const focusable = [...lb.querySelectorAll("button:not([hidden])")];
+    if (!focusable.length) return;
+    const first = focusable[0], last = focusable[focusable.length - 1];
+    if (e.shiftKey && document.activeElement === first) {
+      e.preventDefault(); last.focus();
+    } else if (!e.shiftKey && document.activeElement === last) {
+      e.preventDefault(); first.focus();
+    }
+  });
+
+  const easeIO = t => t < 0.5 ? 4*t*t*t : 1 - Math.pow(-2*t + 2, 3) / 2;
+
+  function lbTargetRect() {
+    const c = cards[lbIdx];
+    const vw = window.innerWidth, vh = window.innerHeight;
+    const mobile = vw <= 640;
+    const availW = vw * G.lightbox.maxWidthVW;
+    const availH = vh * (mobile ? 0.6 : G.lightbox.maxHeightVH);
+    let h = availH, w = h * c.aspect;
+    if (w > availW) { w = availW; h = w / c.aspect; }
+    return { x: (vw - w) / 2, y: (mobile ? vh * 0.44 : vh * 0.5) - h / 2, w, h };
+  }
+  function setLbRect(r) {
+    lbCard.style.left = r.x + "px"; lbCard.style.top = r.y + "px";
+    lbCard.style.width = r.w + "px"; lbCard.style.height = r.h + "px";
+    lbShadow.style.left = (r.x - r.w*0.08) + "px"; lbShadow.style.top = (r.y + r.h*0.06) + "px";
+    lbShadow.style.width = r.w * 1.16 + "px"; lbShadow.style.height = r.h * 0.98 + "px";
+  }
+  function setLbTitle() {
+    const c = cards[lbIdx];
+    $("lbTitle").querySelector(".t").textContent = c.cfg.title || c.id.toUpperCase();
+    $("lbTitle").querySelector(".m").textContent =
+      [c.cfg.year, c.cfg.material].filter(Boolean).join("  ·  ");
+  }
+
+  /* 销毁渲染资源但保留上下文：loseContext 会让 canvas 永久拿不到新上下文，
+     导致关闭后再次打开追光失效。改为确定性删除纹理/缓冲/程序/着色器。 */
+  function destroyRenderer() {
+    if (!renderer) return;
+    renderer.dead = true;
+    try {
+      const gl = renderer.gl, R = renderer.res || {};
+      (R.textures || []).forEach(t => gl.deleteTexture(t));
+      if (R.buffer) gl.deleteBuffer(R.buffer);
+      (R.shaders || []).forEach(s => gl.deleteShader(s));
+      if (R.program) gl.deleteProgram(R.program);
+    } catch (_) {}
+    renderer = null;
+    lbCanvas.width = 0; lbCanvas.height = 0;
+    lbCanvas.style.display = "none";
+  }
+
+  async function bootRenderer() {
+    destroyRenderer();
+    lbNotice.hidden = true;
+    const c = cards[lbIdx];
+    lbImg.src = c.id + "/" + c.cfg.assets.albedo;
+    try {
+      const [albedo, normal, roughness, height] = await Promise.all(
+        ["albedo","normal","roughness","height"].map(k => loadImage(c.id + "/" + c.cfg.assets[k])));
+      if (!lbOpen) return;
+      renderer = createCardRenderer(lbCanvas, c.cfg, { albedo, normal, roughness, height });
+      if (!renderer) throw new Error("WebGL2 unavailable");
+      resizeRenderer();
+      lbCanvas.style.display = "block";
+    } catch (err) {
+      renderer = null;
+      lbNotice.textContent = "Relief lighting unavailable (" + (err && err.message || err) + "); showing the static artwork.";
+      lbNotice.hidden = false;
+    }
+  }
+  function resizeRenderer() {
+    if (!renderer) return;
+    const dpr = Math.min(window.devicePixelRatio || 1, renderer.cfg.render.maxDPR);
+    const r = lbCard.getBoundingClientRect();
+    lbCanvas.width = Math.max(1, Math.round(r.width * dpr));
+    lbCanvas.height = Math.max(1, Math.round(r.height * dpr));
+    renderer.gl.viewport(0, 0, lbCanvas.width, lbCanvas.height);
+  }
+  lbCanvas.addEventListener("webglcontextlost", e => {
+    e.preventDefault();
+    renderer = null;
+    lbCanvas.style.display = "none";
+    lbNotice.textContent = "Graphics context lost; showing the static artwork. Close and reopen the card to retry.";
+    lbNotice.hidden = false;
+  });
+  lbCanvas.addEventListener("webglcontextrestored", () => {
+    if (lbOpen && !renderer && !switching) bootRenderer();
+  });
+
+  function openLightbox(i) {
+    if (lbOpen) return;
+    lastFocusedElement = document.activeElement instanceof HTMLElement ? document.activeElement : null;
+    lbOpen = true; lbIdx = i;
+    snapTarget = null; vel = 0; motionPhase = "idle"; dragging = false;
+    stage.classList.remove("grabbing");
+    const r0 = cards[i].img.getBoundingClientRect();
+    setLbTitle();
+    lb.setAttribute("aria-hidden", "false");
+    stage.inert = true;
+    lb.classList.add("on");
+    $("lbClose").focus({ preventScroll: true });
+    lbImg.src = cards[i].id + "/" + cards[i].cfg.assets.albedo;
+    lbCanvas.style.display = "none";
+    const r1 = lbTargetRect();
+    if (REDUCED) {
+      setLbRect(r1); lbBackdrop.style.opacity = 1; anim = null;
+      bootRenderer();
+    } else {
+      const start = performance.now(), dur = G.lightbox.openDuration;
+      anim = now => {
+        const t = easeIO(clamp((now - start) / dur, 0, 1));
+        setLbRect({ x: r0.left + (r1.x - r0.left) * t, y: r0.top + (r1.y - r0.top) * t,
+                    w: r0.width + (r1.w - r0.width) * t, h: r0.height + (r1.h - r0.height) * t });
+        lbBackdrop.style.opacity = t;
+        if (t >= 1) { anim = null; bootRenderer(); }
+      };
+    }
+  }
+
+  function closeLightbox() {
+    if (!lbOpen || switching) return;
+    destroyRenderer();
+    const target = cards[lbIdx].img.getBoundingClientRect();
+    const finish = () => {
+      lb.classList.remove("on");
+      lb.setAttribute("aria-hidden", "true");
+      stage.inert = false;
+      lbOpen = false; lbIdx = -1; anim = null;
+      const focusTarget = lastFocusedElement;
+      lastFocusedElement = null;
+      if (focusTarget && document.contains(focusTarget)) focusTarget.focus({ preventScroll: true });
+    };
+    if (REDUCED) { finish(); return; }
+    const r0 = { x: parseFloat(lbCard.style.left), y: parseFloat(lbCard.style.top),
+                 w: lbCard.offsetWidth, h: lbCard.offsetHeight };
+    const start = performance.now(), dur = G.lightbox.openDuration * 0.82;
+    anim = now => {
+      const t = easeIO(clamp((now - start) / dur, 0, 1));
+      setLbRect({ x: r0.x + (target.left - r0.x) * t, y: r0.y + (target.top - r0.y) * t,
+                  w: r0.w + (target.width - r0.w) * t, h: r0.h + (target.height - r0.h) * t });
+      lbBackdrop.style.opacity = 1 - t;
+      if (t >= 1) finish();
+    };
+  }
+
+  async function switchCard(dir) {
+    if (!lbOpen || switching) return;
+    switching = true;
+    const dur = REDUCED ? 0 : G.lightbox.switchDuration;
+    if (dur) {
+      const start = performance.now();
+      await new Promise(res => {
+        const step = now => {
+          const t = clamp((now - start) / dur, 0, 1);
+          lbCard.style.transform = `translateX(${(-dir * 46 * t).toFixed(1)}px)`;
+          lbCard.style.opacity = String(1 - t);
+          if (t >= 1) res(); else requestAnimationFrame(step);
+        };
+        requestAnimationFrame(step);
+      });
+    }
+    destroyRenderer();
+    lbIdx = (lbIdx + dir + cards.length) % cards.length;
+    setLbTitle();
+    setLbRect(lbTargetRect());
+    lbImg.src = cards[lbIdx].id + "/" + cards[lbIdx].cfg.assets.albedo;
+    const p = bootRenderer();
+    if (dur) {
+      const start = performance.now();
+      await new Promise(res => {
+        const step = now => {
+          const t = clamp((now - start) / dur, 0, 1);
+          lbCard.style.transform = `translateX(${(dir * 46 * (1 - t)).toFixed(1)}px)`;
+          lbCard.style.opacity = String(t);
+          if (t >= 1) res(); else requestAnimationFrame(step);
+        };
+        requestAnimationFrame(step);
+      });
+    }
+    lbCard.style.transform = ""; lbCard.style.opacity = "";
+    await p;
+    resizeRenderer();
+    switching = false;
+  }
+
+  $("lbPrev").addEventListener("click", () => switchCard(-1));
+  $("lbNext").addEventListener("click", () => switchCard(1));
+  $("lbClose").addEventListener("click", closeLightbox);
+  lbBackdrop.addEventListener("click", closeLightbox);
+
+  /* 灯箱内指针：追光 + 手机滑动切换 */
+  function lbLightFromEvent(e) {
+    if (!renderer) return;
+    const r = lbCard.getBoundingClientRect();
+    const m = renderer.cfg.mouse;
+    renderer.mouse.u = clamp((e.clientX - r.left) / r.width, m.uvMin, m.uvMax);
+    renderer.mouse.v = clamp(1 - (e.clientY - r.top) / r.height, m.uvMin, m.uvMax);
+    renderer.lastPointerT = performance.now();
+  }
+  lb.addEventListener("pointermove", e => { if (lbOpen && !anim) lbLightFromEvent(e); });
+  lbCard.addEventListener("pointerdown", e => {
+    lbPointer = { down: true, x0: e.clientX, y0: e.clientY };
+    lbLightFromEvent(e);
+  });
+  lbCard.addEventListener("pointerup", e => {
+    if (!lbPointer.down) return;
+    lbPointer.down = false;
+    const dx = e.clientX - lbPointer.x0, dy = e.clientY - lbPointer.y0;
+    if (Math.abs(dx) > G.lightbox.swipeThreshold &&
+        Math.abs(dx) > Math.abs(dy) * G.lightbox.swipeDominance) {
+      switchCard(dx < 0 ? 1 : -1);
+    }
+  });
+
+  /* ---- 6. 尺寸变化 / 转屏 / 回后台 ---- */
+  function onResize() {
+    layout();
+    if (lbOpen && !anim) { setLbRect(lbTargetRect()); resizeRenderer(); }
+  }
+  window.addEventListener("resize", onResize);
+  window.addEventListener("orientationchange", () => setTimeout(onResize, 60));
+  document.addEventListener("visibilitychange", () => { if (!document.hidden) onResize(); });
+
+  /* ---- 7. 单一 rAF 主循环 ---- */
+  let lastT = performance.now();
+  function tick(now) {
+    const dt = Math.min(50, now - lastT); lastT = now;
+
+    if (anim) anim(now);
+
+    if (!lbOpen) {
+      if (!dragging) {
+        const dtSeconds = clamp(dt / 1000, 0, 1 / 30);
+        if (motionPhase === "idle" && lastWheelT > 0 && now - lastWheelT > 72) {
+          motionPhase = "coast";
+          lastWheelT = -1e9;
+        }
+        if (motionPhase === "coast") {
+          vel *= Math.exp(-10 * dtSeconds);
+          cam += vel * dtSeconds;
+          if (Math.abs(vel) < motionStep() * 0.55) {
+            snapTarget = snapTarget === null ? nearestTrackPosition(cam) : snapTarget;
+            motionPhase = "snap";
+          }
+        }
+        if (motionPhase === "snap" && snapTarget !== null) {
+          if (REDUCED) {
+            cam = snapTarget; vel = 0; snapTarget = null; motionPhase = "idle";
+          } else {
+            const d = wrapDelta(snapTarget - cam);
+            const acceleration = d * 72 - vel * 17;
+            vel += acceleration * dtSeconds;
+            cam += vel * dtSeconds;
+            if (Math.abs(d) < 0.08 && Math.abs(vel) < 0.08) {
+              cam += d; vel = 0; snapTarget = null; motionPhase = "idle";
+            }
+          }
+        }
+      }
+      renderCarousel();
+    }
+
+    if (renderer && !renderer.dead && !anim && !switching) {
+      const cfg = renderer.cfg.tilt;
+      const tu = clamp(renderer.mouse.u, 0, 1), tv = clamp(renderer.mouse.v, 0, 1);
+      let tRY =  (tu - 0.5) * 2 * cfg.maxDeg;
+      let tRX = -(tv - 0.5) * 2 * cfg.maxDeg;
+      if (now - renderer.lastPointerT > 2500 && !REDUCED) {
+        tRX += Math.sin(now / 1000 * cfg.swaySpeed) * cfg.swayDeg;
+        tRY += Math.cos(now / 1000 * cfg.swaySpeed * 0.83) * cfg.swayDeg;
+      }
+      renderer.rx += (tRX - renderer.rx) * cfg.ease;
+      renderer.ry += (tRY - renderer.ry) * cfg.ease;
+      lbCard.style.transform =
+        `rotateX(${renderer.rx.toFixed(3)}deg) rotateY(${renderer.ry.toFixed(3)}deg)`;
+      lbCard.style.transformStyle = "preserve-3d";
+      lb.style.perspective = cfg.perspective + "px";
+
+      const gl = renderer.gl, U = renderer.U;
+      gl.uniform2f(U.uMouse, renderer.mouse.u, renderer.mouse.v);
+      gl.uniform1f(U.uTime, now / 1000);
+      gl.clear(gl.COLOR_BUFFER_BIT);
+      gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+    }
+
+    requestAnimationFrame(tick);
+  }
+
+  /* ---- 8. 首次布局与渲染：全部状态、DOM 引用与事件绑定就绪后执行 ---- */
+  layout();
+  renderCarousel();
+  requestAnimationFrame(tick);
+
+  if (skipped.length) {
+    console.warn("[Gallery] The skipped-card list is shown above; the page will continue running.");
+  }
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,40 @@
+{
+  "version": 1,
+  "note": "Public demo configuration. Add card folders to order after providing four texture maps.",
+  "exhibition": {
+    "title": "Relief Light Gallery",
+    "logoLine1": "RELIEF LIGHT",
+    "logoLine2": "LAB",
+    "topCenterLeft": "SURFACES IN LIGHT",
+    "topCenterRight": "MEMORIES IN RELIEF",
+    "aboutText": "Open Source",
+    "hintDesktop": "DRAG · SCROLL · ← → TO EXPLORE — CLICK A CARD TO INSPECT",
+    "hintMobile": "SWIPE TO EXPLORE — TAP A CARD TO INSPECT"
+  },
+  "order": ["demo-card"],
+  "carousel": {
+    "cardHeightVH": 0.44,
+    "cardHeightMin": 220,
+    "cardHeightMax": 520,
+    "cardHeightMobileVH": 0.34,
+    "gapRatio": 0.3,
+    "perspective": 1600,
+    "depth": 230,
+    "dimStrength": 0.62,
+    "dragThreshold": 8,
+    "wheelSpeed": 1
+  },
+  "lightbox": {
+    "maxHeightVH": 0.78,
+    "maxWidthVW": 0.88,
+    "openDuration": 420,
+    "switchDuration": 220,
+    "swipeThreshold": 46,
+    "swipeDominance": 1.4
+  },
+  "fx": {
+    "particleCount": 30,
+    "titleFadeMs": 260,
+    "candleVideo": ""
+  }
+}

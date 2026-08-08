@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="600" height="900" viewBox="0 0 600 900">
+  <defs>
+    <radialGradient id="bg" cx="50%" cy="38%" r="72%">
+      <stop offset="0" stop-color="#27352f"/>
+      <stop offset="0.62" stop-color="#101713"/>
+      <stop offset="1" stop-color="#050706"/>
+    </radialGradient>
+    <linearGradient id="gold" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#6f4615"/>
+      <stop offset="0.28" stop-color="#f0ce79"/>
+      <stop offset="0.52" stop-color="#9d6725"/>
+      <stop offset="0.78" stop-color="#ffe8a4"/>
+      <stop offset="1" stop-color="#65400f"/>
+    </linearGradient>
+    <filter id="glow"><feGaussianBlur stdDeviation="4"/></filter>
+  </defs>
+  <rect width="600" height="900" rx="42" fill="url(#bg)"/>
+  <rect x="24" y="24" width="552" height="852" rx="31" fill="none" stroke="#d7b45f" stroke-width="5"/>
+  <rect x="42" y="42" width="516" height="816" rx="24" fill="none" stroke="#77501e" stroke-width="2"/>
+  <circle cx="300" cy="358" r="184" fill="none" stroke="url(#gold)" stroke-width="18"/>
+  <circle cx="300" cy="358" r="150" fill="#111b18" stroke="#d4ac55" stroke-width="4"/>
+  <path d="M300 205 338 300 440 306 362 372 384 472 300 418 216 472 238 372 160 306 262 300Z" fill="#172b25" stroke="url(#gold)" stroke-width="12" stroke-linejoin="round"/>
+  <circle cx="300" cy="350" r="62" fill="#7c321d" stroke="#f1ce72" stroke-width="10"/>
+  <circle cx="300" cy="350" r="20" fill="#f6dc8d" filter="url(#glow)" opacity=".65"/>
+  <circle cx="300" cy="350" r="14" fill="#ffeaa4"/>
+  <path d="M86 142c62 2 98-30 116-76M514 142c-62 2-98-30-116-76M86 758c62-2 98 30 116 76M514 758c-62-2-98 30-116 76" fill="none" stroke="url(#gold)" stroke-width="8" stroke-linecap="round"/>
+  <path d="M126 116c8 28 22 48 48 62M474 116c-8 28-22 48-48 62M126 784c8-28 22-48 48-62M474 784c-8-28-22-48-48-62" fill="none" stroke="#bd9141" stroke-width="4"/>
+  <text x="300" y="650" text-anchor="middle" fill="#efd88e" font-family="Georgia,serif" font-size="58" letter-spacing="8">OPEN</text>
+  <text x="300" y="718" text-anchor="middle" fill="#c69c4b" font-family="Georgia,serif" font-size="43" letter-spacing="10">RELIEF</text>
+  <text x="300" y="790" text-anchor="middle" fill="#85704c" font-family="Arial,sans-serif" font-size="15" letter-spacing="7">LIGHT FOLLOWS FORM</text>
+</svg>
