@@ -1,17 +1,28 @@
 {
   "version": 1,
-  "note": "Public demo configuration. Add card folders to order after providing four texture maps.",
+  "note": "Candlelit Relief Archive public exhibition configuration.",
   "exhibition": {
-    "title": "Relief Light Gallery",
-    "logoLine1": "RELIEF LIGHT",
-    "logoLine2": "LAB",
-    "topCenterLeft": "SURFACES IN LIGHT",
+    "title": "Candlelit Relief Archive",
+    "logoLine1": "Zomo Design",
+    "logoLine2": "ARCHIVE",
+    "topCenterLeft": "OBJECTS IN LIGHT",
     "topCenterRight": "MEMORIES IN RELIEF",
-    "aboutText": "Open Source",
+    "aboutText": "About",
     "hintDesktop": "DRAG · SCROLL · ← → TO EXPLORE — CLICK A CARD TO INSPECT",
     "hintMobile": "SWIPE TO EXPLORE — TAP A CARD TO INSPECT"
   },
-  "order": ["demo-card"],
+  "order": [
+    "cat-portrait",
+    "gilded-muse",
+    "november-forest",
+    "red-poppies",
+    "hibiscus",
+    "narcissus",
+    "sword-book",
+    "theatre-poster",
+    "infp",
+    "nature-stamp"
+  ],
   "carousel": {
     "cardHeightVH": 0.44,
     "cardHeightMin": 220,
@@ -35,6 +46,6 @@
   "fx": {
     "particleCount": 30,
     "titleFadeMs": 260,
-    "candleVideo": ""
+    "candleVideo": "candle-sconce-loop.mp4"
   }
 }

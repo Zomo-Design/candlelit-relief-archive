@@ -6,7 +6,7 @@
 <meta name="referrer" content="no-referrer">
 <meta http-equiv="Permissions-Policy" content="camera=(), microphone=(), geolocation=()">
 <link rel="icon" href="data:,">
-<title>Relief Light Gallery</title>
+<title>Candlelit Relief Archive</title>
 <style>
   :root { color-scheme: dark; }
   * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -40,7 +40,7 @@
   .carousel-brand__name {
     display: flex; flex: 1 1 auto; flex-direction: column; align-items: center;
     color: #fff; font: 400 clamp(10.5px, 0.78vw, 16px)/1.04 Arial, Helvetica, sans-serif;
-    letter-spacing: 0.025em; white-space: nowrap;
+    letter-spacing: 0.025em; white-space: nowrap; text-transform: uppercase;
   }
   .carousel-editorial-labels {
     position: fixed; top: clamp(46px, 5.1vh, 59px); left: 50%; z-index: 31;
@@ -146,7 +146,7 @@
     cursor: grab; touch-action: pan-y;
   }
   #stage.grabbing { cursor: grabbing; }
-  #lightbox.on { cursor: crosshair; }
+  #lightbox.on { cursor: url(cursor-candle.png) 64 6, auto; }
   #lightbox.on .lb-btn { cursor: pointer; }
   #strip { position: absolute; inset: 0; transform-style: preserve-3d; pointer-events: none; }
   .gcard {
@@ -244,8 +244,8 @@
 <div id="particles"></div>
 
 <header>
-  <div class="carousel-brand" role="img" aria-label="RELIEF LIGHT LAB">
-    <img class="carousel-brand__emblem" src="relief-mark.svg" alt="" aria-hidden="true">
+  <div class="carousel-brand" role="img" aria-label="ZOMO DESIGN ARCHIVE">
+    <img class="carousel-brand__emblem" src="card-back-logo.svg" alt="" aria-hidden="true">
     <span class="carousel-brand__name" aria-hidden="true">
       <span id="logoL1"></span><span id="logoL2"></span>
     </span>
@@ -263,7 +263,7 @@
 <div class="candle-zone">
   <span class="candle-ambient"></span>
   <video class="candle-video" id="candleVideo" autoplay muted loop playsinline
-         preload="metadata" disablepictureinpicture></video>
+         preload="metadata" poster="candle-sconce-poster.png" disablepictureinpicture></video>
   <div class="sconce" id="cssCandle" style="display:none">
     <div class="plate"></div><div class="arm"></div><div class="cup"></div>
     <div class="candle"></div><div class="flame"></div>
@@ -292,13 +292,13 @@
 <script>
 "use strict";
 /* ============================================================================
- * Relief Light Gallery —— WebGL2 浮雕收藏卡开源示例
+ * Candlelit Relief Archive —— WebGL2 浮雕收藏卡开源示例
  * 单文件，无外部依赖。轮播=纯 DOM；仅打开的单卡启动 WebGL2 追光。
  * 文本与参数来自 gallery-config.json；每卡渲染参数来自各自 card-config.json。
  * ========================================================================== */
 
 const EMBED_DEFAULTS = {
-  exhibition: { title: "Relief Light Gallery", logoLine1: "RELIEF LIGHT", logoLine2: "LAB",
+  exhibition: { title: "Candlelit Relief Archive", logoLine1: "Zomo Design", logoLine2: "ARCHIVE",
     topCenterLeft: "OBJECTS IN LIGHT", topCenterRight: "MEMORIES IN RELIEF", aboutText: "About",
     hintDesktop: "DRAG · SCROLL · ← → TO EXPLORE — CLICK A CARD TO INSPECT",
     hintMobile: "SWIPE TO EXPLORE — TAP A CARD TO INSPECT" },
@@ -308,7 +308,7 @@ const EMBED_DEFAULTS = {
     dragThreshold: 8, wheelSpeed: 1.0 },
   lightbox: { maxHeightVH: 0.78, maxWidthVW: 0.88, openDuration: 420, switchDuration: 220,
     swipeThreshold: 46, swipeDominance: 1.4 },
-  fx: { particleCount: 30, titleFadeMs: 260, candleVideo: "" }
+  fx: { particleCount: 30, titleFadeMs: 260, candleVideo: "candle-sconce-loop.mp4" }
 };
 
 /* 与单卡验收页一致的渲染默认值（卡片自身 config 覆盖对应字段） */
