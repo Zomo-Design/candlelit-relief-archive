@@ -1,11 +1,13 @@
-# Relief Light Gallery
+# Candlelit Relief Archive
 
-A dependency-free WebGL2 gallery for interactive relief cards. Move the pointer across a card to steer a warm light source; normal, height, and roughness maps control the apparent surface direction, depth, and highlights.
-
-The public repository contains original geometric demo textures only. The private exhibition artwork and brand assets are not included.
+A dependency-free WebGL2 exhibition of ten interactive relief cards by Zomo
+Design. Move the pointer across a card to steer a warm light source; normal,
+height, and roughness maps control the apparent surface direction, depth, and
+highlights.
 
 ## Features
 
+- Ten real relief cards in a continuous, mixed-size carousel
 - One HTML file and no external JavaScript or CSS dependencies
 - WebGL2 normal, height, and roughness-map lighting
 - CSS 3D tilt, parallax, warm rim light, and pointer-following highlights
@@ -22,7 +24,8 @@ chmod +x start-gallery.sh
 ./start-gallery.sh
 ```
 
-Set `NO_OPEN=1` to start the server without opening a browser, or set `PORT=9000` to choose the first port to try.
+Set `NO_OPEN=1` to start the server without opening a browser, or set
+`PORT=9000` to choose the first port to try.
 
 Or start a server manually:
 
@@ -30,11 +33,13 @@ Or start a server manually:
 python3 -m http.server 8174 --bind 127.0.0.1
 ```
 
-Then open <http://127.0.0.1:8174/>. Opening `index.html` through `file://` will not work because browsers block local WebGL texture requests.
+Then open <http://127.0.0.1:8174/>. Opening `index.html` through `file://`
+will not work because browsers block local WebGL texture requests.
 
-## Add a card
+## Use your own card
 
-Create a folder such as `my-card/` containing:
+Create a folder such as `my-card/` containing a configuration file and four
+images:
 
 ```text
 my-card/
@@ -45,21 +50,26 @@ my-card/
   card-roughness.webp
 ```
 
-Copy `demo-card/card-config.json`, update the asset filenames and metadata, then add `"my-card"` to `gallery-config.json` → `order`.
+Use one of the existing `card-config.json` files as a structural reference,
+point its `assets` fields at your own files, update the metadata, and add
+`"my-card"` to `gallery-config.json` → `order`. Do not copy or redistribute the
+included Zomo Design artwork when creating another project.
 
 Map meanings:
 
 - Height map: lighter values appear higher; darker values appear lower.
 - Normal map: RGB values encode which direction each surface faces.
-- Roughness map: darker values produce sharper highlights; lighter values look more matte.
+- Roughness map: darker values produce sharper highlights; lighter values look
+  more matte.
 
 ## Configuration
 
-`gallery-config.json` controls the exhibition and carousel. Each card's `card-config.json` controls lighting, parallax, tilt, rendering, and asset paths.
+`gallery-config.json` controls the exhibition and carousel. Each card's
+`card-config.json` controls lighting, parallax, tilt, rendering, and relative
+asset paths.
 
-All asset paths are same-origin relative paths. Do not place secrets or private URLs in configuration files.
-
-Validate the repository before publishing changes:
+Do not place secrets, machine-specific paths, or private URLs in configuration
+files. Validate the repository before publishing changes:
 
 ```bash
 node scripts/validate.mjs
@@ -67,12 +77,20 @@ node scripts/validate.mjs
 
 ## Browser support
 
-Recent versions of Chrome, Edge, Firefox, and Safari with WebGL2 enabled are recommended. If WebGL2 or a texture fails, the original image remains visible and the page shows a fallback notice.
+Recent versions of Chrome, Edge, Firefox, and Safari with WebGL2 enabled are
+recommended. If WebGL2 or a texture fails, the original image remains visible
+and the page shows a fallback notice.
 
 ## Privacy and network behavior
 
-The included code does not use analytics, cookies, storage, tracking, uploads, or third-party network requests. The local launcher listens only on `127.0.0.1`.
+The included code does not use analytics, cookies, storage, tracking, uploads,
+or third-party network requests. The local launcher listens only on
+`127.0.0.1`.
 
 ## License
 
-Code and included demo assets are available under the [MIT License](LICENSE). See [ASSETS.md](ASSETS.md) before adding or redistributing artwork.
+The software code is available under the [MIT License](LICENSE).
+
+The included card artwork, texture maps, brand mark, cursor, and sconce media
+are © Zomo Design and are not covered by MIT. See
+[ASSET_LICENSE.md](ASSET_LICENSE.md) and [ASSETS.md](ASSETS.md).

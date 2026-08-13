@@ -1,0 +1,64 @@
+{
+  "version": 1,
+  "card": "november-forest",
+  "note": "从原展示页复制的已验收卡片。展览页应读取本文件中的素材路径和渲染参数。",
+  "assets": {
+    "albedo": "card-original.webp",
+    "normal": "card-normal.webp",
+    "roughness": "card-roughness.webp",
+    "height": "card-height.webp"
+  },
+  "lighting": {
+    "lightColor": [
+      1,
+      0.92,
+      0.78
+    ],
+    "ambientColor": [
+      0.82,
+      0.83,
+      0.88
+    ],
+    "ambientStrength": 0.56,
+    "lightZ": 0.5,
+    "normalStrength": 1.45,
+    "normalZFloor": 0.08,
+    "wrapScale": 0.8,
+    "wrapBias": 0.2,
+    "diffuseStrength": 0.62,
+    "shininessHigh": 52,
+    "shininessLow": 6,
+    "specRoughAtten": 0.85,
+    "specStrength": 0.46,
+    "specWrapGate": true,
+    "rimStrength": 0.12,
+    "rimPower": 2,
+    "candleFlicker": 0.04
+  },
+  "parallax": {
+    "amplitude": 0.0034
+  },
+  "mouse": {
+    "uvMin": -0.4,
+    "uvMax": 1.4
+  },
+  "tilt": {
+    "perspective": 1400,
+    "maxDeg": 4.2,
+    "swayDeg": 1.3,
+    "swaySpeed": 0.5,
+    "ease": 0.055
+  },
+  "shadow": {
+    "offset": 26,
+    "grow": 0.1,
+    "fade": 0.35,
+    "baseOpacity": 0.5
+  },
+  "render": {
+    "maxDPR": 1.5
+  },
+  "title": "NOVEMBER",
+  "year": "2026",
+  "material": "INK / GILDED FRAME"
+}

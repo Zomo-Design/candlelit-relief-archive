@@ -3,6 +3,14 @@ import path from "node:path";
 
 const root = path.resolve(import.meta.dirname, "..");
 const resolvedRoot = await realpath(root);
+const requiredRootAssets = [
+  "card-back-logo.svg",
+  "cursor-candle.png",
+  "candle-sconce-loop.mp4",
+  "candle-sconce-poster.png",
+  "ASSET_LICENSE.md",
+];
+const minimumPublicCardCount = 2;
 const generatedHostDirectory = [".", "vercel"].join("");
 
 async function readJson(relativePath) {
@@ -37,8 +45,8 @@ async function listRepositoryFiles(directory = root) {
 }
 
 const gallery = await readJson("gallery-config.json");
-if (!Array.isArray(gallery.order) || gallery.order.length === 0) {
-  throw new Error("gallery-config.json must include at least one card in order");
+if (!Array.isArray(gallery.order) || gallery.order.length < minimumPublicCardCount) {
+  throw new Error(`gallery-config.json must include at least ${minimumPublicCardCount} cards`);
 }
 
 for (const cardId of gallery.order) {
@@ -54,8 +62,16 @@ for (const cardId of gallery.order) {
   }
 }
 
-for (const file of ["index.html", "relief-mark.svg", "LICENSE", "README.md", "SECURITY.md", "ASSETS.md"]) {
+for (const file of ["index.html", "LICENSE", "README.md", "SECURITY.md", "ASSETS.md"]) {
   await requireFile(file);
+}
+for (const file of requiredRootAssets) await requireFile(file);
+
+const assetLicense = await readFile(path.join(root, "ASSET_LICENSE.md"), "utf8");
+for (const phrase of ["All rights reserved", "not licensed under the MIT License", "Zomo Design"]) {
+  if (!assetLicense.includes(phrase)) {
+    throw new Error(`ASSET_LICENSE.md is missing required phrase: ${phrase}`);
+  }
 }
 
 const html = await readFile(path.join(root, "index.html"), "utf8");
@@ -69,7 +85,6 @@ const privateTokens = [
   ["C:", "\\", "Users", "\\"].join(""),
   [".", "vercel", "/"].join(""),
   ["Work", "Buddy"].join(""),
-  ["ZO", "MO"].join(""),
 ];
 const secretPatterns = [
   new RegExp(["gho", "_"].join("") + "[A-Za-z0-9]{20,}"),
