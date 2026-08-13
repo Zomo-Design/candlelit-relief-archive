@@ -42,7 +42,7 @@ PY
 )"
 
 URL="http://127.0.0.1:${PORT}/"
-echo "Relief Light Gallery: $URL"
+echo "Candlelit Relief Archive: $URL"
 echo "Press Ctrl+C to stop."
 
 open_preview() {
