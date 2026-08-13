@@ -584,6 +584,7 @@ function createCardRenderer(canvas, cfg, images) {
   let cam = 0, vel = 0, dragging = false, moved = 0, lastX = 0, lastMoveT = 0;
   let pressCard = null, currentIdx = -1, snapTarget = null, motionPhase = "idle";
   let lbOpen = false, lbIdx = -1, anim = null, renderer = null, switching = false;
+  let ignoreOpeningBackdropClick = false;
   let lastFocusedElement = null;
   let lbPointer = { down: false, x0: 0, y0: 0 };
 
@@ -739,7 +740,11 @@ function createCardRenderer(canvas, cfg, images) {
     if (e.type === "pointerup" && moved <= C.dragThreshold && pressCard) {
       const idx = cards.indexOf(pressCard);
       pressCard = null; vel = 0; snapTarget = null; motionPhase = "idle";
-      if (idx >= 0) openLightbox(idx);
+      if (idx >= 0) {
+        ignoreOpeningBackdropClick = true;
+        window.setTimeout(() => { ignoreOpeningBackdropClick = false; }, 0);
+        openLightbox(idx);
+      }
       return;
     }
     pressCard = null;
@@ -983,7 +988,14 @@ function createCardRenderer(canvas, cfg, images) {
   $("lbPrev").addEventListener("click", () => switchCard(-1));
   $("lbNext").addEventListener("click", () => switchCard(1));
   $("lbClose").addEventListener("click", closeLightbox);
-  lbBackdrop.addEventListener("click", closeLightbox);
+  lbBackdrop.addEventListener("click", e => {
+    if (ignoreOpeningBackdropClick) {
+      ignoreOpeningBackdropClick = false;
+      e.preventDefault();
+      return;
+    }
+    closeLightbox();
+  });
 
   /* 灯箱内指针：追光 + 手机滑动切换 */
   function lbLightFromEvent(e) {
