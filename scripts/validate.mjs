@@ -11,6 +11,10 @@ const requiredRootAssets = [
   "ASSET_LICENSE.md",
 ];
 const minimumPublicCardCount = 2;
+const canonicalDemoUrl = "https://zomo-design.github.io/candlelit-relief-archive/";
+const requiredPresentationAssets = [
+  "docs/images/candlelit-relief-archive-preview.webp",
+];
 const generatedHostDirectory = [".", "vercel"].join("");
 
 async function readJson(relativePath) {
@@ -66,11 +70,23 @@ for (const file of ["index.html", "LICENSE", "README.md", "SECURITY.md", "ASSETS
   await requireFile(file);
 }
 for (const file of requiredRootAssets) await requireFile(file);
+for (const file of requiredPresentationAssets) await requireFile(file);
 
 const assetLicense = await readFile(path.join(root, "ASSET_LICENSE.md"), "utf8");
 for (const phrase of ["All rights reserved", "not licensed under the MIT License", "Zomo Design"]) {
   if (!assetLicense.includes(phrase)) {
     throw new Error(`ASSET_LICENSE.md is missing required phrase: ${phrase}`);
+  }
+}
+
+const readme = await readFile(path.join(root, "README.md"), "utf8");
+for (const fragment of [
+  canonicalDemoUrl,
+  "docs/images/candlelit-relief-archive-preview.webp",
+  "▶ Open Live Demo",
+]) {
+  if (!readme.includes(fragment)) {
+    throw new Error(`README.md is missing required Demo fragment: ${fragment}`);
   }
 }
 
@@ -95,6 +111,7 @@ const secretPatterns = [
   new RegExp(["prj", "_"].join("") + "[A-Za-z0-9]{8,}"),
 ];
 const allowedUrlPrefixes = [
+  canonicalDemoUrl,
   "http://127.0.0.1:",
   "http://www.w3.org/2000/svg",
 ];

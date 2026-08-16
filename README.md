@@ -5,6 +5,18 @@ Design. Move the pointer across a card to steer a warm light source; normal,
 height, and roughness maps control the apparent surface direction, depth, and
 highlights.
 
+<p align="center">
+  <a href="https://zomo-design.github.io/candlelit-relief-archive/">
+    <img src="docs/images/candlelit-relief-archive-preview.webp"
+         alt="Candlelit Relief Archive interactive ten-card gallery preview"
+         width="960">
+  </a>
+</p>
+
+<p align="center">
+  <a href="https://zomo-design.github.io/candlelit-relief-archive/"><strong>▶ Open Live Demo</strong></a>
+</p>
+
 ## Features
 
 - Ten real relief cards in a continuous, mixed-size carousel

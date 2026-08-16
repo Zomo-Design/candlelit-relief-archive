@@ -4,7 +4,8 @@ Copyright © 2026 Zomo Design. All rights reserved.
 
 The card artwork and texture maps in the ten card directories, together with
 `card-back-logo.svg`, `cursor-candle.png`, `candle-sconce-loop.mp4`, and
-`candle-sconce-poster.png`, are not licensed under the MIT License.
+`candle-sconce-poster.png`, as well as
+`docs/images/candlelit-relief-archive-preview.webp`, are not licensed under the MIT License.
 
 They are included so people can view and run this repository as a complete
 demonstration. No permission is granted to extract, reproduce, redistribute,
