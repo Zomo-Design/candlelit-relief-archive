@@ -27,6 +27,10 @@ height, and roughness maps:
 - `candle-sconce-loop.mp4`
 - `candle-sconce-poster.png`
 
+## README presentation
+
+- `docs/images/candlelit-relief-archive-preview.webp`
+
 These files are included to make the repository's complete public exhibition
 viewable. Their inclusion does not grant permission to reuse them in another
 project.
